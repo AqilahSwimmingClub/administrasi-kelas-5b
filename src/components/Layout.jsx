@@ -9,6 +9,6 @@ export default function Layout({page,setPage,onLogout,settings,children}){
    <nav>{items.map(([key,label,Icon])=><button key={key} className={page===key?'nav active':'nav'} onClick={()=>{setPage(key);setOpen(false)}}><Icon size={19}/>{label}</button>)}</nav>
    <button className="nav logout" onClick={onLogout}><LogOut size={19}/>Keluar</button>
   </aside>
-  <main><header className="topbar"><button className="icon menu" onClick={()=>setOpen(true)}><Menu/></button><div><b>{settings.school}</b><small>Tahun Ajaran {settings.year}</small></div><span className="teacher">{settings.teacher}</span></header><section className="content">{children}</section></main>
+  <main className="main-column"><header className="topbar"><button className="icon menu" onClick={()=>setOpen(true)}><Menu/></button><div><b>{settings.school}</b><small>Tahun Ajaran {settings.year}</small></div><span className="teacher">{settings.teacher}</span></header><section className="content">{children}</section><footer className="app-footer">Dashboard didesain oleh <strong>FAHMI DJAWAS</strong>. © 2026 Semua hak dilindungi</footer></main>
  </div>
 }

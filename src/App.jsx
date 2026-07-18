@@ -32,7 +32,7 @@ export default function App(){
  },[data])
  const login=s=>{setSession(s);sessionStorage.setItem('ak5b_session',JSON.stringify(s));if(s.role==='parent')setPage('parents')}; const logout=()=>{setSession(null);sessionStorage.removeItem('ak5b_session')}
  if(!session)return <Login data={data} onLogin={login}/>
- if(session.role==='parent')return <div className="parent-only"><header><b>Portal Orang Tua — {data.settings.school}</b><span className={`sync-pill ${sync.status==='Offline'?'sync-error':''}`}>{sync.mode==='cloud'?'☁':'●'} {sync.status}</span><button onClick={logout}>Keluar</button></header><main><ParentPortal data={data} studentId={session.studentId}/></main></div>
+ if(session.role==='parent')return <div className="parent-only"><header><b>Portal Orang Tua — {data.settings.school}</b><span className={`sync-pill ${sync.status==='Offline'?'sync-error':''}`}>{sync.mode==='cloud'?'☁':'●'} {sync.status}</span><button onClick={logout}>Keluar</button></header><main><ParentPortal data={data} studentId={session.studentId}/></main><footer className="app-footer parent-footer">Dashboard didesain oleh <strong>FAHMI DJAWAS</strong>. © 2026 Semua hak dilindungi</footer></div>
  const pages={dashboard:<Dashboard data={data}/>,students:<Students data={data} setData={setData}/>,attendance:<Attendance data={data} setData={setData}/>,grades:<Grades data={data} setData={setData}/>,parents:<ParentPortal data={data}/>,settings:<Settings data={data} setData={setData} sync={sync}/>}
  return <Layout page={page} setPage={setPage} onLogout={logout} settings={data.settings} sync={sync}>{pages[page]}</Layout>
 }

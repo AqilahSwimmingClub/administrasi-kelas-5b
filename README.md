@@ -1,54 +1,38 @@
-# Administrasi Kelas 5B
+# Administrasi Kelas 5B - SDN Satria Jaya 01
 
-Aplikasi React + Vite untuk administrasi kelas: login guru/orang tua, dashboard, data siswa, absensi, penilaian, ekspor PDF/Word/Excel, portal orang tua, pengaturan, backup-restore, sinkronisasi cloud opsional, dan PWA.
+Aplikasi React + Vite untuk administrasi Kelas V tahun pelajaran 2026/2027.
 
-## Menjalankan di VS Code
+## Isi versi ini
 
-```bash
-npm install
-npm run dev
-```
+- 33 data siswa dari file Excel pengguna sebagai data awal.
+- Tambah, edit, hapus, cari, dan ekspor data siswa.
+- Absensi harian: Hadir, Sakit, Izin, Alpa, dan Terlambat.
+- Rekap absensi dan cetak/PDF.
+- Daftar nilai Kurikulum Merdeka Semester 1 dan Semester 2.
+- Format nilai: TP1-TP4 pada LM1-LM5, Sumatif Lingkup Materi, dan Sumatif Akhir Semester.
+- Cetak buku nilai lengkap: cover, identitas wali kelas, dan lembar nilai per mata pelajaran.
+- Bagian Kepala Sekolah dan Nomor Statistik Sekolah dihapus sesuai permintaan.
+- Tanggal dan tempat tanda tangan otomatis ketika dicetak.
+- Portal orang tua menggunakan NISN.
+- Sinkronisasi Supabase opsional.
 
-Akun demo:
-- Guru: `guru` / `kelas5b`
-- Orang tua: NISN `0123456789`
+## Login awal
 
-## Sinkronisasi HP, website, dan portal orang tua
+- Username guru: `guru`
+- Password guru: `kelas5b`
+- Portal orang tua: gunakan NISN siswa.
 
-Tanpa konfigurasi cloud, aplikasi memakai `localStorage` dan hanya tersimpan pada perangkat yang sedang digunakan.
+## Vercel
 
-Agar setiap input guru di HP otomatis muncul di website dan portal orang tua:
+- Framework: Vite
+- Root Directory: `./`
+- Install Command: `pnpm install --frozen-lockfile`
+- Build Command: `pnpm run build`
+- Output Directory: `dist`
 
-1. Buat proyek Supabase.
-2. Buka SQL Editor, lalu jalankan isi `supabase/schema.sql`.
-3. Salin `.env.example` menjadi `.env`.
-4. Isi `VITE_SUPABASE_URL` dan `VITE_SUPABASE_ANON_KEY` dari pengaturan API Supabase.
-5. Jalankan ulang `npm run dev` atau build ulang aplikasi.
+## Pembaruan tampilan login
 
-Saat aktif, indikator di bagian atas berubah menjadi **☁ Tersinkron**. Perubahan disimpan ke cloud dan diperbarui secara real-time pada perangkat lain yang memakai `VITE_CLASS_ID` sama.
-
-> Catatan keamanan: kebijakan SQL bawaan dibuat sederhana supaya demo langsung berfungsi. Sebelum dipakai untuk data siswa sebenarnya, aktifkan Supabase Auth dan batasi Row Level Security berdasarkan akun/sekolah.
-
-## Build produksi
-
-```bash
-npm run build
-npm run preview
-```
-
-## Deployment Vercel (Node.js 24)
-
-1. Pastikan **Root Directory** menunjuk ke folder yang berisi `package.json`.
-2. Atur **Framework Preset** ke `Vite`.
-3. Atur **Node.js Version** ke `24.x`.
-4. Gunakan perintah berikut:
-   - Install Command: `npm ci --no-audit --no-fund`
-   - Build Command: `npm run build`
-   - Output Directory: `dist`
-5. Tambahkan Environment Variables:
-   - `VITE_SUPABASE_URL`
-   - `VITE_SUPABASE_ANON_KEY`
-   - `VITE_CLASS_ID=kelas-5b`
-6. Jangan pernah memasukkan `sb_secret_...` ke GitHub atau Vercel frontend.
-
-File `vercel.json` sudah menyimpan pengaturan build. Dependensi sudah dikunci ke versi tertentu dan `package-lock.json` memakai registry publik npm.
+- Halaman login menggunakan gambar kelas 5B yang diberikan pengguna sebagai latar penuh.
+- Form login tetap tersedia untuk Guru dan Orang Tua.
+- Dashboard guru dan portal orang tua menampilkan footer:
+  `Dashboard didesain oleh FAHMI DJAWAS. © 2026 Semua hak dilindungi`

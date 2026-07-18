@@ -1,9 +1,38 @@
-import { useState } from 'react'
-import { Plus,Trash2,X } from 'lucide-react'
-import { Card,Field,Select,ExportBar } from '../components/Common'
+import { useMemo,useState } from 'react'
+import { Printer, Save, FileSpreadsheet } from 'lucide-react'
+import * as XLSX from 'xlsx'
+import { Card,Select } from '../components/Common'
+import { subjects } from '../data'
+import { printGradeBook } from '../utils/exporters'
+
+const fields=[
+ ...Array.from({length:5},(_,lm)=>Array.from({length:4},(_,tp)=>`lm${lm+1}tp${tp+1}`)).flat(),
+ ...Array.from({length:5},(_,i)=>`lm${i+1}`),'sas'
+]
+const n=v=>v===''?'':Math.max(0,Math.min(100,Number(v)||0))
+
 export default function Grades({data,setData}){
- const [open,setOpen]=useState(false),[form,setForm]=useState({studentId:data.students[0]?.id||'',subject:'Matematika',type:'UH',score:0,semester:'Ganjil',note:''})
- const add=e=>{e.preventDefault();setData(d=>({...d,grades:[...d.grades,{...form,id:crypto.randomUUID(),score:Number(form.score)}]}));setOpen(false)}
- const rows=data.grades.map(g=>[data.students.find(s=>s.id===g.studentId)?.name,g.subject,g.type,g.score,g.semester,g.note])
- return <><div className="page-head"><div><h1>Penilaian</h1><p>Kelola nilai kehadiran, sikap, UH, praktik, PAS, PAT, dan PSAT.</p></div><button className="primary" onClick={()=>setOpen(true)}><Plus/>Tambah Nilai</button></div><Card><div className="toolbar"><span><b>{data.grades.length}</b> data penilaian</span><ExportBar title="Rekap Nilai Kelas 5B" columns={['Nama','Mapel','Jenis','Nilai','Semester','Catatan']} rows={rows}/></div><div className="table-wrap"><table><thead><tr><th>Nama</th><th>Mata Pelajaran</th><th>Jenis</th><th>Nilai</th><th>Semester</th><th>Catatan</th><th></th></tr></thead><tbody>{data.grades.map(g=><tr key={g.id}><td>{data.students.find(s=>s.id===g.studentId)?.name}</td><td>{g.subject}</td><td><span className="badge neutral">{g.type}</span></td><td><b className={g.score<75?'low':''}>{g.score}</b></td><td>{g.semester}</td><td>{g.note}</td><td><button className="trash" onClick={()=>setData(d=>({...d,grades:d.grades.filter(x=>x.id!==g.id)}))}><Trash2/></button></td></tr>)}</tbody></table></div></Card>{open&&<div className="modal"><form className="modal-card compact" onSubmit={add}><div className="modal-head"><h2>Tambah Nilai</h2><button type="button" onClick={()=>setOpen(false)}><X/></button></div><Select label="Siswa" value={form.studentId} onChange={e=>setForm({...form,studentId:e.target.value})}>{data.students.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</Select><Field label="Mata Pelajaran" value={form.subject} onChange={e=>setForm({...form,subject:e.target.value})}/><div className="form-grid"><Select label="Jenis" value={form.type} onChange={e=>setForm({...form,type:e.target.value})}>{['Kehadiran','Sikap','UH','Praktik','PAS','PAT','PSAT'].map(x=><option key={x}>{x}</option>)}</Select><Field label="Nilai" type="number" min="0" max="100" value={form.score} onChange={e=>setForm({...form,score:e.target.value})}/><Select label="Semester" value={form.semester} onChange={e=>setForm({...form,semester:e.target.value})}><option>Ganjil</option><option>Genap</option></Select><Field label="Catatan" value={form.note} onChange={e=>setForm({...form,note:e.target.value})}/></div><button className="primary wide">Simpan Nilai</button></form></div>}</>
+ const [subject,setSubject]=useState(subjects[0])
+ const [semester,setSemester]=useState(data.settings.semester||'1')
+ const key=(studentId,field)=>`${studentId}|${subject}|${semester}|${field}`
+ const map=useMemo(()=>Object.fromEntries((data.grades||[]).map(g=>[`${g.studentId}|${g.subject}|${g.semester}|${g.field}`,g.score])),[data.grades])
+ const [draft,setDraft]=useState({})
+ const value=(sid,f)=>draft[key(sid,f)]??map[key(sid,f)]??''
+ const setScore=(sid,f,v)=>setDraft(d=>({...d,[key(sid,f)]:v}))
+ const save=()=>{
+  setData(d=>{
+   const changed={...draft}; const keep=(d.grades||[]).filter(g=>changed[`${g.studentId}|${g.subject}|${g.semester}|${g.field}`]===undefined)
+   const added=Object.entries(changed).filter(([,v])=>v!=='').map(([k,v])=>{const [studentId,sub,sem,field]=k.split('|');return{id:crypto.randomUUID(),studentId,subject:sub,semester:sem,field,score:n(v)}})
+   return {...d,grades:[...keep,...added]}
+  });setDraft({});alert('Nilai tersimpan.')
+ }
+ const exportExcel=()=>{
+  const rows=data.students.map((s,i)=>[i+1,s.nis,s.name,...fields.map(f=>value(s.id,f))])
+  const headers=['No','NIS','Nama',...fields.map(f=>f.toUpperCase())]
+  const ws=XLSX.utils.aoa_to_sheet([headers,...rows]); ws['!cols']=[{wch:5},{wch:13},{wch:30},...fields.map(()=>({wch:7}))]
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,`${subject.slice(0,25)} S${semester}`);XLSX.writeFile(wb,`Nilai-${subject}-Semester-${semester}.xlsx`)
+ }
+ return <><div className="page-head"><div><h1>Daftar Nilai Kurikulum Merdeka</h1><p>Format TP1-TP4, LM1-LM5, dan Sumatif Akhir Semester.</p></div><div className="grade-actions"><button className="primary" onClick={save}><Save/>Simpan</button><button onClick={exportExcel}><FileSpreadsheet/>Excel</button><button onClick={()=>printGradeBook(data,semester,subject)}><Printer/>Cetak/PDF</button></div></div>
+ <Card><div className="toolbar grade-filter"><Select label="Semester" value={semester} onChange={e=>setSemester(e.target.value)}><option value="1">1 (Satu)</option><option value="2">2 (Dua)</option></Select><Select label="Mata Pelajaran" value={subject} onChange={e=>setSubject(e.target.value)}>{subjects.map(x=><option key={x}>{x}</option>)}</Select><button onClick={()=>printGradeBook(data,semester,null)}><Printer/>Cetak Buku Nilai Lengkap</button></div>
+ <div className="grade-table-wrap"><table className="grade-table"><thead><tr><th rowSpan="3">No</th><th rowSpan="3">NIS</th><th rowSpan="3" className="name-col">Nama</th><th colSpan="20">Formatif</th><th colSpan="5">Sumatif Lingkup Materi</th><th rowSpan="3">Sumatif Akhir Semester</th></tr><tr>{[1,2,3,4,5].map(x=><th colSpan="4" key={x}>Lingkup Materi {x}</th>)}<th colSpan="5">LM</th></tr><tr>{[1,2,3,4,5].flatMap(lm=>[1,2,3,4].map(tp=><th key={`${lm}-${tp}`}>TP{tp}</th>))}{[1,2,3,4,5].map(x=><th key={x}>LM{x}</th>)}</tr></thead><tbody>{data.students.map((s,i)=><tr key={s.id}><td>{i+1}</td><td>{s.nis}</td><td className="student-name">{s.name}</td>{fields.map(f=><td key={f}><input type="number" min="0" max="100" value={value(s.id,f)} onChange={e=>setScore(s.id,f,e.target.value)}/></td>)}</tr>)}</tbody></table></div></Card></>
 }
