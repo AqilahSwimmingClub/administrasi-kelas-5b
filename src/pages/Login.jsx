@@ -33,8 +33,7 @@ export default function Login({ data, onLogin }) {
   return <main className="master-login-page">
     <div className="master-login-overlay"/>
     <form className="master-login-card" onSubmit={submit}>
-      <div className="gold-tutwuri-mark"><span>✦</span><b>TUT WURI HANDAYANI</b></div>
-      <div className="login-stars">★ ★　 ★ ★</div>
+      <div className="gold-tutwuri-mark"><img src="/tutwuri-handayani-clean.png" alt="Logo Tut Wuri Handayani"/><span className="mini-stars">★　★　★　★</span></div>
       <p className="master-login-kicker">SISTEM ADMINISTRASI</p>
       <h1>KELAS 5B</h1>
       <p className="master-login-subtitle">Silakan masuk untuk melanjutkan</p>
