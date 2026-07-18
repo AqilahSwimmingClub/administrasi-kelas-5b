@@ -36,3 +36,10 @@ Aplikasi React + Vite untuk administrasi Kelas V tahun pelajaran 2026/2027.
 - Form login tetap tersedia untuk Guru dan Orang Tua.
 - Dashboard guru dan portal orang tua menampilkan footer:
   `Dashboard didesain oleh FAHMI DJAWAS. © 2026 Semua hak dilindungi`
+
+## Tema Army Gold Final
+- Splash screen ADMINISTRASI KELAS 5B.
+- Login animasi dengan panel gelap transparan dan aksen emas.
+- Dashboard guru dan portal orang tua bertema army green, hitam, dan emas.
+- Seluruh teks dibuat kontras agar jelas dibaca.
+- Footer: Dashboard didesain oleh FAHMI DJAWAS. © 2026 Semua hak dilindungi.
