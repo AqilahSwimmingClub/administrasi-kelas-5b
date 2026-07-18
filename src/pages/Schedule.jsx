@@ -3,10 +3,11 @@ import { CalendarDays, Plus, Trash2, Clock3 } from 'lucide-react'
 import { Card } from '../components/Common'
 
 const empty={date:new Date().toISOString().slice(0,10),start:'07:00',end:'08:00',title:'',type:'Kegiatan Kelas'}
+const notice=(title,message)=>({id:`nt-${Date.now()}-${Math.random().toString(36).slice(2,7)}`,title,message,page:'schedule',type:'schedule',createdAt:new Date().toISOString(),read:false})
 export default function Schedule({data,setData}){
  const [form,setForm]=useState(empty)
  const rows=useMemo(()=>[...(data.schedules||[])].sort((a,b)=>`${a.date}${a.start}`.localeCompare(`${b.date}${b.start}`)),[data.schedules])
- const submit=e=>{e.preventDefault();if(!form.title.trim())return;setData(d=>({...d,schedules:[...(d.schedules||[]),{...form,id:`ag${Date.now()}`}]}));setForm({...empty,date:form.date})}
+ const submit=e=>{e.preventDefault();if(!form.title.trim())return;setData(d=>({...d,schedules:[...(d.schedules||[]),{...form,id:`ag${Date.now()}`}],notifications:[notice('Agenda baru',`${form.title.trim()} — ${form.date} ${form.start}`),...(d.notifications||[])]}));setForm({...empty,date:form.date})}
  const remove=id=>setData(d=>({...d,schedules:(d.schedules||[]).filter(x=>x.id!==id)}))
  return <>
   <div className="page-head"><div><h1>Jadwal & Agenda</h1><p>Kelola kegiatan kelas, penilaian, dan agenda sekolah.</p></div></div>

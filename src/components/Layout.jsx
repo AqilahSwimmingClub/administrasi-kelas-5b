@@ -1,29 +1,18 @@
-import { LayoutDashboard, Users, CalendarCheck, ClipboardList, Settings, LogOut, GraduationCap, Menu, X, Bell, ShieldCheck, CalendarDays, Megaphone } from 'lucide-react'
-import { useState } from 'react'
-const items=[
- ['dashboard','Beranda',LayoutDashboard],
- ['students','Data Siswa',Users],
- ['attendance','Absensi',CalendarCheck],
- ['grades','Penilaian',ClipboardList],
- ['schedule','Jadwal',CalendarDays],
- ['announcements','Pengumuman',Megaphone],
- ['settings','Pengaturan',Settings]
-]
-export default function Layout({page,setPage,onLogout,settings,children,data}){
- const [open,setOpen]=useState(false)
- const activeNotices=(data?.announcements||[]).filter(x=>x.active).length
+import { LayoutDashboard, Users, CalendarCheck, ClipboardList, Settings, LogOut, GraduationCap, Menu, X, Bell, ShieldCheck, CalendarDays, Megaphone, CheckCheck, Trash2 } from 'lucide-react'
+import { useEffect,useRef,useState } from 'react'
+const items=[['dashboard','Beranda',LayoutDashboard],['students','Data Siswa',Users],['attendance','Absensi',CalendarCheck],['grades','Penilaian',ClipboardList],['schedule','Jadwal',CalendarDays],['announcements','Pengumuman',Megaphone],['settings','Pengaturan',Settings]]
+const timeText=value=>{try{return new Date(value).toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'short'})}catch{return ''}}
+export default function Layout({page,setPage,onLogout,settings,children,data,setData}){
+ const [open,setOpen]=useState(false),[noticeOpen,setNoticeOpen]=useState(false)
+ const noticeRef=useRef(null)
+ const notices=[...(data?.notifications||[])].sort((a,b)=>String(b.createdAt||'').localeCompare(String(a.createdAt||'')))
+ const unread=notices.filter(x=>!x.read).length
+ useEffect(()=>{const close=e=>{if(noticeRef.current&&!noticeRef.current.contains(e.target))setNoticeOpen(false)};document.addEventListener('mousedown',close);return()=>document.removeEventListener('mousedown',close)},[])
+ const markAll=()=>setData(d=>({...d,notifications:(d.notifications||[]).map(n=>({...n,read:true}))}))
+ const deleteRead=()=>setData(d=>({...d,notifications:(d.notifications||[]).filter(n=>!n.read)}))
+ const openNotice=n=>{setData(d=>({...d,notifications:(d.notifications||[]).map(x=>x.id===n.id?{...x,read:true}:x)}));if(n.page)setPage(n.page);setNoticeOpen(false)}
  return <div className="app-shell">
-  <aside className={open?'sidebar open':'sidebar'}>
-   <div className="brand"><ShieldCheck size={36}/><div><b>ADMINISTRASI</b><small>KELAS 5B</small></div><button className="icon mobile-close" onClick={()=>setOpen(false)}><X/></button></div>
-   <div className="sidebar-star">★</div>
-   <nav>{items.map(([key,label,Icon])=><button key={key} className={page===key?'nav active':'nav'} onClick={()=>{setPage(key);setOpen(false)}}><Icon size={19}/>{label}</button>)}</nav>
-   <button className="nav logout" onClick={onLogout}><LogOut size={19}/>Keluar</button>
-   <div className="sidebar-credit"><ShieldCheck/><span>Dashboard didesain oleh</span><b>FAHMI DJAWAS.</b><small>© 2026 Semua hak dilindungi.</small></div>
-  </aside>
-  <main className="main-column">
-   <header className="topbar"><button className="icon menu" onClick={()=>setOpen(true)}><Menu/></button><div className="school-head"><GraduationCap/><span><b>{settings.school}</b><small>Tahun Pelajaran {settings.year}</small></span></div><div className="top-actions"><button className="icon notification" onClick={()=>setPage('announcements')}><Bell/><i>{activeNotices}</i></button><div className="teacher-profile"><div className="mini-avatar">FD</div><span><b>{settings.teacher}</b><small>Guru Kelas 5B</small></span></div></div></header>
-   <section className="content">{children}</section>
-   <footer className="app-footer">Dashboard didesain oleh <strong>FAHMI DJAWAS</strong>. © 2026 Semua hak dilindungi</footer>
-  </main>
+  <aside className={open?'sidebar open':'sidebar'}><div className="brand"><ShieldCheck size={36}/><div><b>ADMINISTRASI</b><small>KELAS 5B</small></div><button className="icon mobile-close" onClick={()=>setOpen(false)}><X/></button></div><div className="sidebar-star">★</div><nav>{items.map(([key,label,Icon])=><button key={key} className={page===key?'nav active':'nav'} onClick={()=>{setPage(key);setOpen(false)}}><Icon size={19}/>{label}</button>)}</nav><button className="nav logout" onClick={onLogout}><LogOut size={19}/>Keluar</button><div className="sidebar-credit"><ShieldCheck/><span>Dashboard didesain oleh</span><b>FAHMI DJAWAS.</b><small>© 2026 Semua hak dilindungi.</small></div></aside>
+  <main className="main-column"><header className="topbar"><button className="icon menu" onClick={()=>setOpen(true)}><Menu/></button><div className="school-head"><GraduationCap/><span><b>{settings.school}</b><small>Tahun Pelajaran {settings.year}</small></span></div><div className="top-actions"><div className="notification-center" ref={noticeRef}><button className="icon notification" onClick={()=>setNoticeOpen(v=>!v)} aria-label="Buka notifikasi"><Bell/>{unread>0&&<i>{unread>99?'99+':unread}</i>}</button>{noticeOpen&&<div className="notification-panel"><div className="notification-head"><div><b>Notifikasi</b><small>{unread} belum dibaca</small></div><button className="icon" onClick={()=>setNoticeOpen(false)}><X size={18}/></button></div><div className="notification-actions"><button onClick={markAll} disabled={!unread}><CheckCheck size={16}/>Tandai Semua Dibaca</button><button onClick={deleteRead} disabled={!notices.some(n=>n.read)}><Trash2 size={16}/>Hapus yang Dibaca</button></div><div className="notification-list">{notices.length?notices.map(n=><button key={n.id} className={n.read?'notice-item read':'notice-item'} onClick={()=>openNotice(n)}><span className="notice-dot"/><span><b>{n.title}</b><p>{n.message}</p><small>{timeText(n.createdAt)}</small></span></button>):<div className="notification-empty">Belum ada notifikasi.</div>}</div></div>}</div><div className="teacher-profile"><div className="mini-avatar">FD</div><span><b>{settings.teacher}</b><small>Guru Kelas 5B</small></span></div></div></header><section className="content">{children}</section><footer className="app-footer">Dashboard didesain oleh <strong>FAHMI DJAWAS</strong>. © 2026 Semua hak dilindungi</footer></main>
  </div>
 }

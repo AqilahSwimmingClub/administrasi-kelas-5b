@@ -1,6 +1,9 @@
 import { seedStudents, seedAttendance, seedGrades, seedSchedules, seedAnnouncements, initialSettings } from '../data'
 const KEY='ak5b_data_v2'
-const fresh=()=>({students:seedStudents,attendance:seedAttendance,grades:seedGrades,schedules:seedSchedules,announcements:seedAnnouncements,settings:initialSettings})
+const seedNotifications=()=>[
+ {id:'n-welcome',title:'Aplikasi siap digunakan',message:'Notifikasi, data siswa, absensi, nilai, jadwal, dan pengumuman siap dikelola.',type:'system',page:'dashboard',createdAt:new Date().toISOString(),read:false}
+]
+const fresh=()=>({students:seedStudents,attendance:seedAttendance,grades:seedGrades,schedules:seedSchedules,announcements:seedAnnouncements,notifications:seedNotifications(),settings:initialSettings})
 export function loadData(){
  try{
   const saved=JSON.parse(localStorage.getItem(KEY)||'null')
@@ -11,6 +14,7 @@ export function loadData(){
    grades:Array.isArray(saved.grades)?saved.grades:[],
    schedules:Array.isArray(saved.schedules)?saved.schedules:seedSchedules,
    announcements:Array.isArray(saved.announcements)?saved.announcements:seedAnnouncements,
+   notifications:Array.isArray(saved.notifications)?saved.notifications:seedNotifications(),
    settings:{...initialSettings,...(saved.settings||{})}
   }
  }catch{return fresh()}

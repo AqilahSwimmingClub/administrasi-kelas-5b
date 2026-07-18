@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { Megaphone, Plus, Trash2, ToggleLeft, ToggleRight } from 'lucide-react'
 import { Card } from '../components/Common'
 const empty={title:'',body:'',date:new Date().toISOString().slice(0,10),active:true}
+const notice=(title,message)=>({id:`nt-${Date.now()}-${Math.random().toString(36).slice(2,7)}`,title,message,page:'announcements',type:'announcement',createdAt:new Date().toISOString(),read:false})
 export default function Announcements({data,setData}){
  const [form,setForm]=useState(empty)
- const submit=e=>{e.preventDefault();if(!form.title.trim())return;setData(d=>({...d,announcements:[{...form,id:`pn${Date.now()}`},...(d.announcements||[])]}));setForm(empty)}
+ const submit=e=>{e.preventDefault();if(!form.title.trim())return;setData(d=>({...d,announcements:[{...form,id:`pn${Date.now()}`},...(d.announcements||[])],notifications:[notice('Pengumuman baru',form.title.trim()),...(d.notifications||[])]}));setForm(empty)}
  const remove=id=>setData(d=>({...d,announcements:(d.announcements||[]).filter(x=>x.id!==id)}))
  const toggle=id=>setData(d=>({...d,announcements:(d.announcements||[]).map(x=>x.id===id?{...x,active:!x.active}:x)}))
  return <>
