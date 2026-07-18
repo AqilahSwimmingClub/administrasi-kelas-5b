@@ -464,3 +464,15 @@ export const initialSettings = {
   teacherPassword:'kelas5b',
   accent:'#155e75'
 }
+
+export const seedSchedules = [
+  {id:'ag1',date:'2026-07-29',start:'07:00',end:'08:00',title:'Upacara Bendera',type:'Kegiatan Sekolah'},
+  {id:'ag2',date:'2026-07-31',start:'08:00',end:'10:00',title:'Penilaian Praktik',type:'Penilaian'},
+  {id:'ag3',date:'2026-08-02',start:'08:00',end:'12:00',title:'Agenda Kelas 5B',type:'Kegiatan Kelas'}
+]
+
+export const seedAnnouncements = [
+  {id:'pn1',title:'Persiapan Pembelajaran Semester',body:'Informasi kelas aktif untuk Tahun Pelajaran 2026/2027.',date:'2026-07-18',active:true},
+  {id:'pn2',title:'Pengumpulan Nilai Formatif',body:'Silakan lengkapi nilai formatif Semester 1.',date:'2026-07-17',active:true},
+  {id:'pn3',title:'Agenda Kelas 5B',body:'Silakan cek jadwal terbaru pada menu Jadwal.',date:'2026-07-16',active:true}
+]

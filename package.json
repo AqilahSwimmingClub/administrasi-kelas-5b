@@ -1,7 +1,7 @@
 {
   "name": "administrasi-kelas-5b",
   "private": true,
-  "version": "4.0.0",
+  "version": "5.0.0",
   "type": "module",
   "engines": {
     "node": ">=20 <23"
