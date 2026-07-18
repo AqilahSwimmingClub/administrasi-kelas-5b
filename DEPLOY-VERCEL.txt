@@ -1,0 +1,32 @@
+ADMINISTRASI KELAS 5B — LANGKAH DEPLOY
+
+1. Ekstrak ZIP ini.
+2. Hapus seluruh isi repository GitHub lama.
+3. Upload SEMUA ISI hasil ekstrak, bukan file ZIP-nya.
+4. Pastikan package.json dan pnpm-lock.yaml terlihat langsung di halaman utama repository.
+5. Di Vercel pilih repository tersebut.
+6. Root Directory: kosong / . (jangan memilih subfolder).
+7. Framework Preset: Vite.
+8. Install Command: biarkan otomatis, atau pnpm install --frozen-lockfile.
+9. Build Command: pnpm run build.
+10. Output Directory: dist.
+11. Node.js Version: 22.x.
+12. Tambahkan Environment Variables Supabase bila digunakan:
+    VITE_SUPABASE_URL
+    VITE_SUPABASE_ANON_KEY
+    VITE_CLASS_ID
+13. Redeploy tanpa cache.
+
+TANDA STRUKTUR BENAR DI GITHUB:
+package.json
+pnpm-lock.yaml
+vercel.json
+vite.config.js
+index.html
+src/
+public/
+supabase/
+
+Project ini telah diuji dengan:
+pnpm install --frozen-lockfile
+pnpm run build

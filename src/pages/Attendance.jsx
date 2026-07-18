@@ -1,0 +1,10 @@
+import { useState } from 'react'
+import { Save } from 'lucide-react'
+import { Card,ExportBar } from '../components/Common'
+export default function Attendance({data,setData}){
+ const [date,setDate]=useState(new Date().toISOString().slice(0,10)); const existing=id=>data.attendance.find(a=>a.date===date&&a.studentId===id)
+ const [draft,setDraft]=useState({}); const get=(id,k)=>draft[id]?.[k]??existing(id)?.[k]??(k==='status'?'Hadir':'')
+ const save=()=>{setData(d=>{const keep=d.attendance.filter(a=>a.date!==date);const added=d.students.map(s=>({id:existing(s.id)?.id||crypto.randomUUID(),date,studentId:s.id,status:get(s.id,'status'),note:get(s.id,'note')}));return {...d,attendance:[...keep,...added]}});alert('Absensi tersimpan.')}
+ const rows=data.attendance.map(a=>[a.date,data.students.find(s=>s.id===a.studentId)?.name,a.status,a.note])
+ return <><div className="page-head"><div><h1>Absensi</h1><p>Catat kehadiran harian tahun ajaran {data.settings.year}.</p></div></div><Card><div className="toolbar"><label className="inline-date">Tanggal <input type="date" value={date} onChange={e=>{setDate(e.target.value);setDraft({})}}/></label><ExportBar title="Rekap Absensi Kelas 5B" columns={['Tanggal','Nama','Status','Keterangan']} rows={rows}/></div><div className="table-wrap"><table><thead><tr><th>No</th><th>Nama Siswa</th><th>Status</th><th>Keterangan</th></tr></thead><tbody>{data.students.map((s,i)=><tr key={s.id}><td>{i+1}</td><td><b>{s.name}</b><small>{s.nisn}</small></td><td><select className={`status-select ${get(s.id,'status').toLowerCase()}`} value={get(s.id,'status')} onChange={e=>setDraft({...draft,[s.id]:{...draft[s.id],status:e.target.value}})}><option>Hadir</option><option>Sakit</option><option>Izin</option><option>Alpa</option></select></td><td><input className="table-input" value={get(s.id,'note')} onChange={e=>setDraft({...draft,[s.id]:{...draft[s.id],note:e.target.value}})} placeholder="Keterangan opsional"/></td></tr>)}</tbody></table></div><button className="primary save" onClick={save}><Save/>Simpan Absensi</button></Card></>
+}

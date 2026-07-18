@@ -1,0 +1,23 @@
+ADMINISTRASI KELAS 5B — PAKET FINAL ROOT
+
+PENTING:
+1. Upload ISI folder ini langsung ke root repository GitHub.
+2. Di halaman utama GitHub harus langsung terlihat:
+   package.json, vercel.json, vite.config.js, index.html, src, public, supabase.
+3. Jangan upload folder ADMINISTRASI-KELAS-5B-FINAL-ROOT sebagai folder pembungkus.
+
+PENGATURAN VERCEL:
+- Root Directory: ./ (repository root)
+- Framework Preset: Vite
+- Node.js Version: 24.x
+- Install Command: pnpm install --no-frozen-lockfile
+- Build Command: pnpm run build
+- Output Directory: dist
+
+ENVIRONMENT VARIABLES:
+VITE_SUPABASE_URL=https://ID-PROYEK.supabase.co
+VITE_SUPABASE_ANON_KEY=sb_publishable_xxxxx
+VITE_CLASS_ID=kelas-5b
+ENABLE_EXPERIMENTAL_COREPACK=1
+
+Jangan masukkan sb_secret ke GitHub atau Vercel frontend.
