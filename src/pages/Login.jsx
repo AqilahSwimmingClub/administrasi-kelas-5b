@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Eye, EyeOff, User, Users } from 'lucide-react'
+import { Eye, EyeOff, LogIn, User, Users } from 'lucide-react'
 
 export default function Login({ data, onLogin }) {
   const [role, setRole] = useState('teacher')
@@ -42,54 +42,63 @@ export default function Login({ data, onLogin }) {
   }
 
   return (
-    <div className="login-page">
-      <div className="login-overlay" />
-      <div className="login-glow login-glow-one" />
-      <div className="login-glow login-glow-two" />
+    <main className="final-login-page">
+      <div className="final-login-shade" />
+      <form className="final-login-card" onSubmit={submit}>
+        <div className="final-login-logo">★</div>
+        <p className="final-login-kicker">SISTEM ADMINISTRASI</p>
+        <h1>KELAS 5B</h1>
+        <p className="final-login-subtitle">Silakan masuk untuk melanjutkan</p>
 
-      <section className="login-identity" aria-label="Identitas pembuat aplikasi">
-        <img src="/fahmi-djawas.jpg" alt="Fahmi Djawas, S.Pd" className="login-portrait" />
-        <div className="login-nameplate">
-          <strong>FAHMI DJAWAS, S.Pd</strong>
-          <span>Wali Kelas V • SDN Satria Jaya 01</span>
-        </div>
-      </section>
-
-      <form className="login-card" onSubmit={submit}>
-        <div className="login-emblem">★</div>
-        <h2>Selamat Datang</h2>
-        <p>Masuk sebagai guru atau orang tua.</p>
-
-        <div className="role-tabs">
+        <div className="final-role-tabs">
           <button type="button" className={role === 'teacher' ? 'selected' : ''} onClick={() => changeRole('teacher')}>
-            <User size={19} /> Guru
+            <User size={20} /> LOGIN GURU
           </button>
           <button type="button" className={role === 'parent' ? 'selected' : ''} onClick={() => changeRole('parent')}>
-            <Users size={19} /> Orang Tua
+            <Users size={20} /> LOGIN ORANG TUA
           </button>
         </div>
 
-        <label>
-          <span>{role === 'teacher' ? 'Username' : 'NISN Siswa'}</span>
-          <input value={user} onChange={event => setUser(event.target.value)} required />
+        <label className="final-input-row">
+          <User size={20} />
+          <input
+            aria-label={role === 'teacher' ? 'Username' : 'NISN siswa'}
+            placeholder={role === 'teacher' ? 'Username' : 'NISN Siswa'}
+            value={user}
+            onChange={event => setUser(event.target.value)}
+            required
+          />
         </label>
 
         {role === 'teacher' && (
-          <label>
-            <span>Kata Sandi</span>
-            <div className="password">
-              <input type={show ? 'text' : 'password'} value={pass} onChange={event => setPass(event.target.value)} required />
-              <button type="button" aria-label="Tampilkan kata sandi" onClick={() => setShow(!show)}>
-                {show ? <EyeOff /> : <Eye />}
-              </button>
-            </div>
+          <label className="final-input-row">
+            <span className="lock-symbol">▣</span>
+            <input
+              aria-label="Kata sandi"
+              placeholder="Kata Sandi"
+              type={show ? 'text' : 'password'}
+              value={pass}
+              onChange={event => setPass(event.target.value)}
+              required
+            />
+            <button type="button" className="show-password" aria-label="Tampilkan kata sandi" onClick={() => setShow(!show)}>
+              {show ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
           </label>
         )}
 
-        {error && <div className="error">{error}</div>}
-        <button className="primary wide">Masuk</button>
-        <small className="demo">Demo guru: guru / kelas5b<br />Demo orang tua: 0123456789</small>
+        {error && <div className="error final-error">{error}</div>}
+
+        <button className="final-login-submit" type="submit"><LogIn size={21} /> MASUK</button>
+        <small className="final-demo">
+          Demo guru: guru / kelas5b<br />
+          Demo orang tua: 0123456789 <b>(NISN)</b>
+        </small>
       </form>
-    </div>
+
+      <footer className="final-login-footer">
+        Dashboard didesain oleh <strong>FAHMI DJAWAS</strong>. © 2026 Semua hak dilindungi.
+      </footer>
+    </main>
   )
 }
