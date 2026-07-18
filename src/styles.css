@@ -167,3 +167,119 @@
 .parent-only{background:linear-gradient(rgba(4,7,4,.91),rgba(4,7,4,.95)),url('/login-master-bg.jpg') center/cover fixed!important}
 .sidebar{background:linear-gradient(180deg,rgba(8,11,8,.985),rgba(11,14,10,.985))!important}
 .content{background:linear-gradient(180deg,rgba(5,8,5,.32),rgba(5,8,5,.2))}
+
+/* ===== FIX FINAL LOGIN: background dipertahankan, isi form rapi ===== */
+.master-login-card{
+  width:min(390px,27vw)!important;
+  padding:14px 16px 13px!important;
+  max-height:calc(100vh - 70px);
+  overflow:auto;
+}
+.gold-tutwuri-mark{
+  height:56px!important;
+  margin-bottom:1px!important;
+}
+.gold-tutwuri-mark img{
+  width:46px!important;
+  height:46px!important;
+  filter:sepia(1) saturate(2.1) hue-rotate(355deg) brightness(.82) contrast(1.22) drop-shadow(0 0 7px rgba(216,166,60,.55))!important;
+}
+.master-login-kicker{font-size:16px!important;line-height:1.15!important;margin-top:2px!important}
+.master-login-card h1{font-size:34px!important;margin-top:1px!important}
+.master-login-subtitle{font-size:11px!important;margin:6px 0 9px!important}
+.master-role-tabs{margin-bottom:8px!important}
+.master-role-tabs button{padding:9px 5px!important;font-size:11px!important}
+
+/* label global aplikasi sebelumnya memakai flex-direction:column; khusus form login wajib horizontal */
+.master-input-row{
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:9px!important;
+  height:44px!important;
+  margin:8px 0!important;
+  padding:0 11px!important;
+}
+.master-input-row > svg{
+  display:block!important;
+  flex:0 0 18px!important;
+  width:18px!important;
+  height:18px!important;
+}
+.master-input-row input{
+  display:block!important;
+  flex:1 1 auto!important;
+  width:auto!important;
+  min-width:0!important;
+  height:42px!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  color:#fff!important;
+  line-height:42px!important;
+  text-align:left!important;
+}
+.master-input-row .show-password{
+  flex:0 0 32px!important;
+  width:32px!important;
+  height:32px!important;
+  margin:0!important;
+  padding:4px!important;
+  display:grid!important;
+  place-items:center!important;
+}
+.login-options{
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  margin:4px 1px 1px!important;
+}
+.login-options label{
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  gap:6px!important;
+  margin:0!important;
+  white-space:nowrap!important;
+}
+.login-options label input{width:15px!important;height:15px!important;margin:0!important;padding:0!important}
+.login-options button{margin:0!important;white-space:nowrap!important}
+.master-login-submit{height:43px!important;margin-top:7px!important;font-size:15px!important}
+.master-demo{margin-top:7px!important;font-size:9.5px!important}
+
+/* Portal orang tua memakai background login yang sama, dengan lapisan gelap agar teks tetap jelas */
+.parent-only{
+  min-height:100vh!important;
+  background:
+    linear-gradient(rgba(3,5,3,.86),rgba(3,5,3,.92)),
+    url('/login-master-bg.jpg') center center/cover fixed no-repeat!important;
+}
+.parent-only > header{
+  background:rgba(7,10,7,.92)!important;
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid #82682f!important;
+  box-shadow:0 8px 25px rgba(0,0,0,.4);
+}
+.parent-only > main{
+  position:relative;
+  z-index:1;
+}
+.parent-only .card{
+  background:linear-gradient(145deg,rgba(18,23,15,.94),rgba(7,10,7,.96))!important;
+  backdrop-filter:blur(10px);
+}
+
+@media(max-width:1250px){
+  .master-login-card{width:min(370px,30vw)!important}
+}
+@media(max-width:980px){
+  .master-login-card{width:min(370px,46vw)!important}
+}
+@media(max-width:700px){
+  .master-login-card{width:min(360px,94vw)!important;max-height:calc(100vh - 70px)!important}
+  .master-login-page{background-position:34% center!important}
+}
