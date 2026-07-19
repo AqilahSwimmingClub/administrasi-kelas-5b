@@ -3,7 +3,7 @@ const KEY='ak5b_data_v2'
 const seedNotifications=()=>[
  {id:'n-welcome',title:'Aplikasi siap digunakan',message:'Notifikasi, data siswa, absensi, nilai, jadwal, dan pengumuman siap dikelola.',type:'system',page:'dashboard',createdAt:new Date().toISOString(),read:false}
 ]
-const fresh=()=>({students:seedStudents,attendance:seedAttendance,grades:seedGrades,schedules:seedSchedules,announcements:seedAnnouncements,notifications:seedNotifications(),settings:initialSettings})
+const fresh=()=>({students:seedStudents,attendance:seedAttendance,attendanceAudit:[],grades:seedGrades,schedules:seedSchedules,announcements:seedAnnouncements,notifications:seedNotifications(),learningObjectives:[],reportGrades:[],settings:initialSettings})
 export function loadData(){
  try{
   const saved=JSON.parse(localStorage.getItem(KEY)||'null')
@@ -11,10 +11,13 @@ export function loadData(){
   return {
    students:Array.isArray(saved.students)?saved.students:seedStudents,
    attendance:Array.isArray(saved.attendance)?saved.attendance:[],
+   attendanceAudit:Array.isArray(saved.attendanceAudit)?saved.attendanceAudit:[],
    grades:Array.isArray(saved.grades)?saved.grades:[],
    schedules:Array.isArray(saved.schedules)?saved.schedules:seedSchedules,
    announcements:Array.isArray(saved.announcements)?saved.announcements:seedAnnouncements,
    notifications:Array.isArray(saved.notifications)?saved.notifications:seedNotifications(),
+   learningObjectives:Array.isArray(saved.learningObjectives)?saved.learningObjectives:[],
+   reportGrades:Array.isArray(saved.reportGrades)?saved.reportGrades:[],
    settings:{...initialSettings,...(saved.settings||{})}
   }
  }catch{return fresh()}
