@@ -6,14 +6,28 @@ create table if not exists public.class_app_data (
 
 alter table public.class_app_data enable row level security;
 
--- Versi sederhana untuk satu kelas. Untuk produksi, gunakan Supabase Auth dan kebijakan per pengguna.
+drop policy if exists "class data readable" on public.class_app_data;
 create policy "class data readable" on public.class_app_data
 for select using (true);
 
+drop policy if exists "class data insertable" on public.class_app_data;
 create policy "class data insertable" on public.class_app_data
 for insert with check (true);
 
+drop policy if exists "class data updatable" on public.class_app_data;
 create policy "class data updatable" on public.class_app_data
 for update using (true) with check (true);
 
-alter publication supabase_realtime add table public.class_app_data;
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_publication_tables
+    where pubname = 'supabase_realtime'
+      and schemaname = 'public'
+      and tablename = 'class_app_data'
+  ) then
+    alter publication supabase_realtime add table public.class_app_data;
+  end if;
+end
+$$;

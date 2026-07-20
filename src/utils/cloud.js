@@ -5,7 +5,7 @@ const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
 export const cloudEnabled = Boolean(url && anonKey)
 export const supabase = cloudEnabled ? createClient(url, anonKey) : null
-export const CLASS_ID = import.meta.env.VITE_CLASS_ID || 'kelas-5b'
+export const CLASS_ID = import.meta.env.VITE_CLASS_ID || 'kelas-5b-sdn-satria-jaya-01'
 
 export async function loadCloudData() {
   if (!supabase) return null
