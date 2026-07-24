@@ -3,7 +3,7 @@ const KEY='ak5b_data_v2'
 const seedNotifications=()=>[
  {id:'n-welcome',title:'Aplikasi siap digunakan',message:'Notifikasi, data siswa, absensi, nilai, jadwal, dan pengumuman siap dikelola.',type:'system',page:'dashboard',createdAt:new Date().toISOString(),read:false}
 ]
-const fresh=()=>({students:seedStudents,attendance:seedAttendance,attendanceAudit:[],grades:seedGrades,schedules:seedSchedules,announcements:seedAnnouncements,notifications:seedNotifications(),learningObjectives:[],reportGrades:[],reportCompleteness:{},settings:initialSettings})
+const fresh=()=>({students:seedStudents,attendance:seedAttendance,attendanceAudit:[],grades:seedGrades,schedules:seedSchedules,announcements:seedAnnouncements,notifications:seedNotifications(),familyInformation:[],familyDocuments:{},learningObjectives:[],reportGrades:[],reportCompleteness:{},settings:initialSettings})
 export function loadData(){
  try{
   const saved=JSON.parse(localStorage.getItem(KEY)||'null')
@@ -16,6 +16,8 @@ export function loadData(){
    schedules:Array.isArray(saved.schedules)?saved.schedules:seedSchedules,
    announcements:Array.isArray(saved.announcements)?saved.announcements:seedAnnouncements,
    notifications:Array.isArray(saved.notifications)?saved.notifications:seedNotifications(),
+   familyInformation:Array.isArray(saved.familyInformation)?saved.familyInformation:[],
+   familyDocuments:saved.familyDocuments&&typeof saved.familyDocuments==='object'?saved.familyDocuments:{},
    learningObjectives:Array.isArray(saved.learningObjectives)?saved.learningObjectives:[],
    reportGrades:Array.isArray(saved.reportGrades)?saved.reportGrades:[],
    reportCompleteness:saved.reportCompleteness&&typeof saved.reportCompleteness==='object'?saved.reportCompleteness:{},
