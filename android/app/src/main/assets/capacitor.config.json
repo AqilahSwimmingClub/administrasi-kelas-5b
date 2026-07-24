@@ -1,0 +1,9 @@
+{
+	"appId": "id.fahmidjawas.administrasikelas5b",
+	"appName": "Fahmi Djawas Administrasi Kelas 5B",
+	"webDir": "dist",
+	"bundledWebRuntime": false,
+	"server": {
+		"androidScheme": "https"
+	}
+}
